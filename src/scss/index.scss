@@ -1,0 +1,22 @@
+@import "common/normalize.css";
+
+body {
+  height: 300px;
+  width: 500px;
+  border: 1px solid red;
+  animation-duration: 1s;
+}
+
+/*OptimizeCssAssetsPlugin  优化z-index*/
+.unknow {
+  position: absolute;
+  z-index: 1000;
+}
+/*OptimizeCssAssetsPlugin  只能合并属性*/
+.aa{
+  height:100px;
+  width: 100px;
+}
+.bb{
+  height:100px;
+}
