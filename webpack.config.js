@@ -82,6 +82,7 @@ module.exports = function (env, argv) {
         output: {
             path: distDir,
             publicPath: env ? '/dist/' : '../',
+            //publicPath: env ? '/dist/' : '/perfectWebpack/dist/',
             filename: env ? "js/[name].js" : "js/[name]-[chunkhash].js",
             chunkFilename: env ? "js/[name]-chunk.js" : "js/[name]-chunk-[chunkhash].js",
             pathinfo: !!env,
@@ -119,7 +120,6 @@ module.exports = function (env, argv) {
                         options: {
                             includePaths: [scssDir, componentDir]
                         }
-
                     }] : cssExtractTextPlugin.extract({
                         use: [{
                             loader: "css-loader"
