@@ -8,6 +8,7 @@ const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
+// const ManifestPlugin = require('webpack-manifest-plugin'); 生成一个资源对象，键名为打包前资源名称，键值为打包后资源名称
 const webpack = require('webpack');
 
 const distDir = path.resolve(__dirname, 'dist');
@@ -244,6 +245,7 @@ module.exports = function (env, argv) {
                     cssProcessorOptions: {discardComments: {removeAll: true}},
                     canPrint: true
                 })
+                // new ManifestPlugin()
             ].concat(htmlPlugin),
         devServer: env ? {
             /*proxy: { // proxy URLs to backend development server
