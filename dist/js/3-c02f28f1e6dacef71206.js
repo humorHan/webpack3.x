@@ -1,0 +1,1 @@
+!function(e,o){"object"==typeof exports&&"object"==typeof module?module.exports=o():"function"==typeof define&&define.amd?define([],o):"object"==typeof exports?exports.humorHan=o():e.humorHan=o()}(this,function(){return webpackJsonphumorHan([2],{2:function(e,exports,o){"use strict";var t=o(0);!function(e){e&&e.__esModule}(t)}},[2])});

@@ -29,9 +29,9 @@ let entries = (function () {
         let fileName = filePath.substring(filePath.lastIndexOf('\/') + 1, filePath.lastIndexOf('.'));
         map[fileName] = filePath;
     });
-    /*TODO 公共js单独打一个包
+    /*//TODO 公共js单独打一个包
      map['vendor'] = [
-     path.join(__dirname, 'js', 'common', 'base')
+     path.resolve(__dirname, 'src', 'dep', 'jquery-3.1.1.min.js')
      ];*/
     return map;
 })();
@@ -175,7 +175,7 @@ module.exports = function (env, argv) {
         plugins: env ?
             [
                 new webpack.DefinePlugin({
-                    'env': JSON.stringify('dev')
+                    'ENV': JSON.stringify('dev')
                 }),
                 new webpack.optimize.CommonsChunkPlugin({
                     name: "vendor",
@@ -194,35 +194,20 @@ module.exports = function (env, argv) {
             ].concat(htmlPlugin) : [
                 new CleanWebpackPlugin(distDir),
                 new webpack.DefinePlugin({
-                    'env': JSON.stringify('production')
+                    'ENV': JSON.stringify('production')
                 }),
+
                 new webpack.optimize.CommonsChunkPlugin({
                     name: "vendor",
-                    filename: "js/vendor-[hash].js",
-                    /* TODO 是数值的话，每个有模板引入的入口文件都有art-template的runtime.js，函数的话引入多次的库没有办法打包到vendor文件
-                     minChunks: function (module) {
-                     if(module.resource && (/^.*\.(css|scss)$/).test(module.resource)) {
-                     return false;
-                     }
-                     return module.context && module.context.indexOf("node_modules") !== -1;
-                     },*/
-
-                    minChunks: 5,
+                    filename: "js/vendor-[chunkhash].js",
+                    minChunks: function (module, count) {
+                        if (module.resource && (/^.*\.(css|less|scss)$/).test(module.resource)) {
+                            return false;
+                        }
+                        return module.context && module.context.indexOf("node_modules") !== -1 || count >= 2;
+                    },
                     hash: true
                 }),
-                //TODO 我认为不需要!!!
-                /* 不明白很多配置都有如下代码，我要跟风？显然不能！
-                 如果没有manifest配置的话，每次打包后vendor的hash都会更改，但是存在hash的情况是线上版本，而每次更新线上基本上必然是有js
-                 的更改包括增加等，那么对应runtime管理必然更改，既然更改了那么就是希望hash改变的，所以压根不用做如下操作。
-                 如果非要说那么写如下代码的意义的话，那么应该是： js css没有增加，只是解决了一点bug比如更改了一点js代码，
-                 这样的话希望对于管理runtime是没有更改的，也就是说线上希望得到一个hash没有改变的manifest 和一个更改hash的vendor或者js文件
-                 那么这种情况又有多少呢？？？
-                 注意 如果做以下操作，需要配合new webpack.HashedModuleIdsPlugin()一起，否则hash一直不更改就不好了
-                 new webpack.optimize.CommonsChunkPlugin({
-                 name: 'manifest',
-                 chunks: ['vendor']
-                 }),*/
-                new BundleAnalyzerPlugin(),
                 new webpack.optimize.UglifyJsPlugin({
                     compress: {
                         warnings: false,
@@ -237,6 +222,11 @@ module.exports = function (env, argv) {
                         except: ['$', 'exports', 'require']
                     }
                 }),
+                //如果更改入口文件的话（不包括入口文件中引用的文件,当然这么说就是改入口文件引用的文件会更新vendor，因为这部分是直接打到vendor里边的会造成vendor内容的更改）只会更新manifest文件的hash不会更改vendor的hash
+                new webpack.optimize.CommonsChunkPlugin({
+                    name: 'manifest',
+                    chunks: ['vendor']
+                }),
                 cssExtractTextPlugin,
                 //正式环境下压缩css，只能合并属性，优化z-index等(当然gulp压缩也ok) 注： 开发环境不可以压缩--会影响sourceMap文件
                 new OptimizeCssAssetsPlugin({
@@ -244,8 +234,8 @@ module.exports = function (env, argv) {
                     cssProcessor: require('cssnano'),
                     cssProcessorOptions: {discardComments: {removeAll: true}},
                     canPrint: true
-                })
-                // new ManifestPlugin()
+                }),
+                new BundleAnalyzerPlugin()
             ].concat(htmlPlugin),
         devServer: env ? {
             /*proxy: { // proxy URLs to backend development server

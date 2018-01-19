@@ -4,6 +4,7 @@
 import printMe from './print.js';
 import 'index.scss';
 let testTpl = require('index.tpl');
+console.log(111);
 
 let main = {
     init: function () {
