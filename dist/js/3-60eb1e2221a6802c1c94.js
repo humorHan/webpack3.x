@@ -1,0 +1,1 @@
+!function(e,o){"object"==typeof exports&&"object"==typeof module?module.exports=o():"function"==typeof define&&define.amd?define([],o):"object"==typeof exports?exports.humorHan=o():e.humorHan=o()}(this,function(){return webpackJsonphumorHan([2],{QdAq:function(e,exports,o){"use strict";var t=o("xML8");!function(e){e&&e.__esModule}(t)}},["QdAq"])});

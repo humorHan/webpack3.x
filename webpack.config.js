@@ -29,9 +29,9 @@ let entries = (function () {
         let fileName = filePath.substring(filePath.lastIndexOf('\/') + 1, filePath.lastIndexOf('.'));
         map[fileName] = filePath;
     });
-    /*//TODO 公共js单独打一个包
+    /*//TODO js标准库s单独打一个包--jq单独引用吧
      map['vendor'] = [
-     path.resolve(__dirname, 'src', 'dep', 'jquery-3.1.1.min.js')
+     path.resolve(__dirname, 'src', 'dep', '标准库.js')
      ];*/
     return map;
 })();
@@ -48,10 +48,10 @@ let htmlPlugin = (function () {
         };
         if (fileName in entries) {
             conf.inject = 'body';
-            conf.chunks = ['vendor', fileName];
+            conf.chunks = ['manifest', 'vendor', fileName];
         } else {
             conf.inject = 'body';
-            conf.chunks = ['vendor'];
+            conf.chunks = ['manifest', 'vendor'];
             console.error('没有匹配到和html(' + fileName + ')相同文件名的js,请检查!');
             //throw new Error('没有匹配到和html相同文件名的js,请检查!');
         }
@@ -214,6 +214,7 @@ module.exports = function (env, argv) {
                         drop_console: true,
                         pure_funcs: ['console.log']
                     },
+                    parallel: true,  //开启多线程
                     sourceMap: false,
                     output: {
                         comments: false
@@ -222,6 +223,7 @@ module.exports = function (env, argv) {
                         except: ['$', 'exports', 'require']
                     }
                 }),
+                new webpack.HashedModuleIdsPlugin(), //以模块相对路径生成模块标识，将id转换成四位编码--防止更改入口文件顺序引起的文件打包后hash的更改
                 //如果更改入口文件的话（不包括入口文件中引用的文件,当然这么说就是改入口文件引用的文件会更新vendor，因为这部分是直接打到vendor里边的会造成vendor内容的更改）只会更新manifest文件的hash不会更改vendor的hash
                 new webpack.optimize.CommonsChunkPlugin({
                     name: 'manifest',
