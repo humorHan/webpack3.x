@@ -165,8 +165,8 @@ module.exports = function (env, argv) {
                         loader: 'html-loader',
                         options: env ? {} : {
                             minimize: true,
-                            removeComments: false,
-                            collapseWhitespace: false
+                            /*removeComments: false,
+                            collapseWhitespace: false*/
                         }
                     }]
                 }
