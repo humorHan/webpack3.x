@@ -1,17 +1,6 @@
 module.exports = {
   "globals": {
-      "window": true,
-      "webview": true,
-      "qq": true,
-      "KNB": true,
-      "Vue": true,
-      "mta": true,
-      "wx": false,
-      "LXAnalytics": true,
-      "soso": true,
-      "Raven": true,
-      "mtdx": true,
-      "jtest": true
+      "window": true
   },
   "root": true,
   "parser": "babel-eslint",
@@ -37,15 +26,7 @@ module.exports = {
               "config": {
                   "resolve": {
                       "alias": {
-                          "page": "/Users/humorhan/work/qcs.fe.activity/src/page",
-                          "components": "/Users/humorhan/work/qcs.fe.activity/src/components",
-                          "services": "/Users/humorhan/work/qcs.fe.activity/src/services",
-                          "assets": "/Users/humorhan/work/qcs.fe.activity/src/assets",
-                          "utils": "/Users/humorhan/work/qcs.fe.activity/src/utils",
-                          "configs": "/Users/humorhan/work/qcs.fe.activity/src/config",
-                          "styles": "/Users/humorhan/work/qcs.fe.activity/src/styles",
-                          "model": "/Users/humorhan/work/qcs.fe.activity/src/model",
-                          "store": "/Users/humorhan/work/qcs.fe.activity/src/store"
+                          "demo": "/Users/humorhan/work/projectDemo/src/page"
                       },
                       "extensions": [
                           ".js",
